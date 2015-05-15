@@ -1,0 +1,94 @@
+plugins {
+    id "com.jfrog.bintray" version "1.2"
+}
+
+group = "ajk.gradle.consul"
+version = "0.0.1"
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+compileGroovy {
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.7'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'de.undercouch:gradle-download-task:1.2'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'a gradle plugin for starting and stopping Consul during integration tests')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+task install(dependsOn: 'publishMavenPublicationToMavenLocal') << {
+    logger.info "installing $project.name"
+}
+
+model {
+    tasks.generatePomFileForMavenPublication {
+        destination = file("$buildDir/libs/gradle-consul-plugin-${project.version}.pom")
+    }
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+
+    publications = ['maven']
+
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = 'gradle-consul-plugin'
+        websiteUrl = 'https://github.com/amirkibbar/red-apple'
+        issueTrackerUrl = 'https://github.com/amirkibbar/red-apple/issues'
+        vcsUrl = 'https://github.com/amirkibbar/red-apple.git'
+        licenses = ['Apache-2.0']
+        labels = ['gradle', 'plugin', 'consul']
+        version {
+            name = project.version
+        }
+    }
+}
+
+bintrayUpload.dependsOn = [sourcesJar, javadocJar]
