@@ -18,7 +18,7 @@ class ConsulPlugin implements Plugin<Project> {
             version = StartConsulTask.DEFAULT_VERSION
             httpPort = StartConsulTask.DEFAULT_HTTP_PORT
             dnsPort = StartConsulTask.DEFAULT_DNS_PORT
-            consulDir = new File(project.rootProject.projectDir.absolutePath + "/gradle/tools/consul")
+            consulDir = new File("$project.rootProject.projectDir/gradle/tools/consul")
         }
 
         def projectAdapter = [
