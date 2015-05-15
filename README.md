@@ -30,6 +30,13 @@ Starting consul:
 
 ```
 
+Stopping consul:
+
+```
+
+    $ gradlew stopConsul
+```
+
 # Configuring the plugin
 
 You can change the consul ports and version by defining the following in your build script:
@@ -46,6 +53,10 @@ You can change the consul ports and version by defining the following in your bu
 ```
 
 The values show here above are the default values.
+
+# Limitations
+
+For the time being this plugin only works on windows 
 
 # References
 
