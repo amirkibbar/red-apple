@@ -23,6 +23,8 @@ class StopConsulTask extends DefaultTask {
             throw new UnsupportedOperationException();
         }
 
+        File f = File.createTempFile("killThemAll_", ".bat")
+        f.deleteOnExit()
 
         f << """
 wmic process where (commandline like "%%$consulDir\\consul.exe%%" and not name="wmic.exe") delete
