@@ -6,17 +6,14 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
+import static ajk.gradle.ConsulPlugin.getCYAN
+import static ajk.gradle.ConsulPlugin.getGREEN
+import static ajk.gradle.ConsulPlugin.getNORMAL
+import static ajk.gradle.ConsulPlugin.getRED
 import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS
 import static org.apache.tools.ant.taskdefs.condition.Os.isFamily
 
 class StartConsulTask extends DefaultTask {
-    static final String ESC = "${(char) 27}"
-    static final String CYAN = "${ESC}[36m"
-    static final String GREEN = "${ESC}[32m"
-    static final String YELLOW = "${ESC}[33m"
-    static final String RED = "${ESC}[31m"
-    static final String NORMAL = "${ESC}[0m"
-
     static final String DEFAULT_VERSION = "0.5.1"
     static final int DEFAULT_HTTP_PORT = 8500
     static final int DEFAULT_DNS_PORT = 8600
@@ -91,6 +88,10 @@ class StartConsulTask extends DefaultTask {
     "http": "0.0.0.0",
     "https": "0.0.0.0",
     "rpc": "127.0.0.1"
+  },
+  "ports": {
+    "dns": $dnsPort,
+    "http": $httpPort
   }
 }
 """

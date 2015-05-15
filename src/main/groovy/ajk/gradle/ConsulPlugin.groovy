@@ -6,6 +6,13 @@ import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle
 
 class ConsulPlugin implements Plugin<Project> {
+    static final String ESC = "${(char) 27}"
+    static final String CYAN = "${ESC}[36m"
+    static final String GREEN = "${ESC}[32m"
+    static final String YELLOW = "${ESC}[33m"
+    static final String RED = "${ESC}[31m"
+    static final String NORMAL = "${ESC}[0m"
+
     private Project project
 
     @Override
@@ -13,6 +20,8 @@ class ConsulPlugin implements Plugin<Project> {
         this.project = project
 
         StartConsulTask startConsul = project.task(type: StartConsulTask, 'startConsul')
+        StopConsulTask stopConsul = project.task(type: StopConsulTask, 'stopConsul')
+
         def extension = project.extensions.create('consul', ConsulExtension)
         extension.with {
             version = StartConsulTask.DEFAULT_VERSION
@@ -28,6 +37,10 @@ class ConsulPlugin implements Plugin<Project> {
                         version = extension.version
                         httpPort = extension.httpPort
                         dnsPort = extension.dnsPort
+                        consulDir = extension.consulDir
+                    }
+
+                    stopConsul.with {
                         consulDir = extension.consulDir
                     }
                 }
