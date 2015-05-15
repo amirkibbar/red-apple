@@ -124,7 +124,7 @@ class StartConsulTask extends DefaultTask {
         if (ant.properties['consulTimeout']) {
             ant.fail("${CYAN}* consul:$RED unable to start consul$NORMAL")
         } else {
-            println "${CYAN}* consul:$GREEN consul is up$NORMAL"
+            println "${CYAN}* consul:$GREEN consul is up, browse to http://localhost:$httpPort to see the UI$NORMAL"
         }
     }
 

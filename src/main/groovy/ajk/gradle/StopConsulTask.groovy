@@ -27,7 +27,7 @@ class StopConsulTask extends DefaultTask {
         f.deleteOnExit()
 
         f << """
-wmic process where (commandline like "%%$consulDir\\consul.exe%%" and not name="wmic.exe") delete
+wmic process where (name like "%%consul%%") delete
 """
 
         println "${CYAN}* consul:$NORMAL stopping consul"
