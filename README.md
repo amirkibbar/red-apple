@@ -111,7 +111,7 @@ The name, address and port are required.
 
 # Limitations
 
-For the time being this plugin only works on windows 
+For the time being the start and stop Consul commands only work on windows 
 
 # References
 
