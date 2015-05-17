@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "ajk.gradle.consul"
-version = "0.0.6-SNAPSHOT"
+version = "0.0.6"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'

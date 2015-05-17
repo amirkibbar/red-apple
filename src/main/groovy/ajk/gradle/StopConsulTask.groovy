@@ -18,21 +18,6 @@ class StopConsulTask extends DefaultTask {
 
     @TaskAction
     void stopConsul() {
-        if (!isFamily(FAMILY_WINDOWS)) {
-            println "${CYAN}* consul:$RED for the time being this plugin is only supported on Windows$NORMAL"
-            throw new UnsupportedOperationException();
-        }
-
-        File f = File.createTempFile("killThemAll_", ".bat")
-        f.deleteOnExit()
-
-        f << """
-wmic process where (name like "%%consul%%") delete
-"""
-
-        println "${CYAN}* consul:$NORMAL stopping consul"
-        [f.getAbsolutePath()].execute().waitForOrKill(10 * 1000)
-
-        f.delete()
+        new StopAction(project, consulDir)
     }
 }

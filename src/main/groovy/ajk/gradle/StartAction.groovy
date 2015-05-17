@@ -10,7 +10,7 @@ import static ajk.gradle.ConsulPlugin.RED
 import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS
 import static org.apache.tools.ant.taskdefs.condition.Os.isFamily
 
-class StartConsulAction {
+class StartAction {
     Project project
 
     int httpPort
@@ -23,17 +23,13 @@ class StartConsulAction {
 
     AntBuilder ant
 
-    StartConsulAction(Project project, ConsulExtension extension) {
-        this.project = project
-        this.ant = project.ant
-        this.httpPort = extension.httpPort
-        this.dnsPort = extension.dnsPort
-        this.version = extension.version
-        this.consulDir = extension.consulDir
+    StartAction(Project project, ConsulExtension extension) {
+        this(project, extension.httpPort, extension.dnsPort, extension.version, extension.consulDir)
     }
 
-    StartConsulAction(Project project, int httpPort, int dnsPort, String version, File consulDir) {
+    StartAction(Project project, int httpPort, int dnsPort, String version, File consulDir) {
         this.project = project
+        this.ant = project.ant
         this.httpPort = httpPort
         this.dnsPort = dnsPort
         this.version = version

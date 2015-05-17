@@ -16,7 +16,7 @@ class StartConsulExtension implements Configurable<StartConsulExtension> {
 
     @Override
     StartConsulExtension configure(Closure closure) {
-        configure(closure, new StartConsulAction(project, consulExtension)).execute()
+        configure(closure, new StartAction(project, consulExtension)).execute()
 
         return this
     }

@@ -24,6 +24,6 @@ class StartConsulTask extends DefaultTask {
 
     @TaskAction
     void startConsul() {
-        new StartConsulAction(project, httpPort, dnsPort, version, consulDir).execute()
+        new StartAction(project, httpPort, dnsPort, version, consulDir).execute()
     }
 }

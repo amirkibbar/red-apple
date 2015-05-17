@@ -54,5 +54,6 @@ class ConsulPlugin implements Plugin<Project> {
         project.gradle.addBuildListener(projectAdapter)
 
         project.extensions.create('startConsul', StartConsulExtension, project, consulExtension)
+        project.extensions.create('stopConsul', StopConsulExtension, project, consulExtension)
     }
 }
