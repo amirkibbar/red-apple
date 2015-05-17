@@ -6,6 +6,10 @@ import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle
 
 class ConsulPlugin implements Plugin<Project> {
+    static final String DEFAULT_VERSION = "0.5.1"
+    static final int DEFAULT_HTTP_PORT = 8500
+    static final int DEFAULT_DNS_PORT = 8600
+
     static final String ESC = "${(char) 27}"
     static final String CYAN = "${ESC}[36m"
     static final String GREEN = "${ESC}[32m"
@@ -22,30 +26,33 @@ class ConsulPlugin implements Plugin<Project> {
         StartConsulTask startConsul = project.task(type: StartConsulTask, 'startConsul')
         StopConsulTask stopConsul = project.task(type: StopConsulTask, 'stopConsul')
 
-        def extension = project.extensions.create('consul', ConsulExtension)
-        extension.with {
-            version = StartConsulTask.DEFAULT_VERSION
-            httpPort = StartConsulTask.DEFAULT_HTTP_PORT
-            dnsPort = StartConsulTask.DEFAULT_DNS_PORT
+        def consulExtension = project.extensions.create('consul', ConsulExtension)
+        consulExtension.with {
+            version = DEFAULT_VERSION
+            httpPort = DEFAULT_HTTP_PORT
+            dnsPort = DEFAULT_DNS_PORT
             consulDir = new File("$project.rootProject.projectDir/gradle/tools/consul")
         }
 
         def projectAdapter = [
                 startConsul      : startConsul,
+                stopConsul       : stopConsul,
                 projectsEvaluated: { Gradle gradle ->
                     startConsul.with {
-                        version = extension.version
-                        httpPort = extension.httpPort
-                        dnsPort = extension.dnsPort
-                        consulDir = extension.consulDir
+                        version = consulExtension.version
+                        httpPort = consulExtension.httpPort
+                        dnsPort = consulExtension.dnsPort
+                        consulDir = consulExtension.consulDir
                     }
 
                     stopConsul.with {
-                        consulDir = extension.consulDir
+                        consulDir = consulExtension.consulDir
                     }
                 }
         ] as BuildAdapter
 
         project.gradle.addBuildListener(projectAdapter)
+
+        project.extensions.create('startConsul', StartConsulExtension, project, consulExtension)
     }
 }
