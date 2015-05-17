@@ -15,7 +15,7 @@ Define the plugin in your build.gradle:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.5")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.6")
         }
     }
 
@@ -53,6 +53,22 @@ You can change the consul ports and version by defining the following in your bu
 ```
 
 The values show here above are the default values.
+
+# Starting and stopping Consul within a gradle task
+
+You can start and stop Consul as part of a gradle task. This is very useful during integration tests:
+
+```
+
+    task foo << {
+        startConsul {}
+        ...
+        stopConsul {}
+    }
+
+```
+
+Consul will start using the configuration in the `Consul {}` section (or the defaults)
 
 # Limitations
 
