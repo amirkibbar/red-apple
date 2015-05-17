@@ -22,7 +22,7 @@ Define the plugin in your build.gradle:
     apply plugin: 'ajk.gradle.consul'
 ```
 
-Starting consul:
+## Starting consul
 
 ```
 
@@ -30,7 +30,9 @@ Starting consul:
 
 ```
 
-Stopping consul:
+You don't need to install Consul - the plugin will install it for you, configure it, add the web UI And then start it.
+
+## Stopping consul
 
 ```
 
