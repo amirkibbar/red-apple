@@ -1,5 +1,6 @@
-package ajk.gradle
+package ajk.gradle.stop
 
+import ajk.gradle.ConsulExtension
 import org.gradle.api.Project
 import org.gradle.util.Configurable
 

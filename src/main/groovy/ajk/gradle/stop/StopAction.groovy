@@ -1,5 +1,7 @@
-package ajk.gradle
+package ajk.gradle.stop
 
+import ajk.gradle.ConsulExtension
+import ajk.gradle.ConsulPlugin
 import org.gradle.api.Project
 
 import static ajk.gradle.ConsulPlugin.CYAN
@@ -27,7 +29,7 @@ class StopAction {
 
     void execute() {
         if (!isFamily(FAMILY_WINDOWS)) {
-            println "${CYAN}* consul:$RED for the time being this plugin is only supported on Windows$NORMAL"
+            println "${ConsulPlugin.CYAN}* consul:$ConsulPlugin.RED for the time being this plugin is only supported on Windows$ConsulPlugin.NORMAL"
             throw new UnsupportedOperationException();
         }
 
@@ -38,7 +40,7 @@ class StopAction {
 wmic process where (name like "%%consul%%") delete
 """
 
-        println "${CYAN}* consul:$NORMAL stopping consul"
+        println "${ConsulPlugin.CYAN}* consul:$ConsulPlugin.NORMAL stopping consul"
         [f.getAbsolutePath()].execute().waitForOrKill(10 * 1000)
 
         f.delete()

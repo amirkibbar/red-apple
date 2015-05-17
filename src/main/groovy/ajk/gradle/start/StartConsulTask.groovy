@@ -1,4 +1,4 @@
-package ajk.gradle
+package ajk.gradle.start
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input

@@ -1,5 +1,10 @@
 package ajk.gradle
 
+import ajk.gradle.registerservice.RegisterServiceExtension
+import ajk.gradle.start.StartConsulExtension
+import ajk.gradle.start.StartConsulTask
+import ajk.gradle.stop.StopConsulExtension
+import ajk.gradle.stop.StopConsulTask
 import org.gradle.BuildAdapter
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -35,9 +40,9 @@ class ConsulPlugin implements Plugin<Project> {
         }
 
         def projectAdapter = [
-                startConsul      : startConsul,
-                stopConsul       : stopConsul,
-                projectsEvaluated: { Gradle gradle ->
+                startConsul          : startConsul,
+                stopConsul           : stopConsul,
+                projectsEvaluated    : { Gradle gradle ->
                     startConsul.with {
                         version = consulExtension.version
                         httpPort = consulExtension.httpPort
@@ -55,5 +60,6 @@ class ConsulPlugin implements Plugin<Project> {
 
         project.extensions.create('startConsul', StartConsulExtension, project, consulExtension)
         project.extensions.create('stopConsul', StopConsulExtension, project, consulExtension)
+        project.extensions.create('registerConsulService', RegisterServiceExtension, project, consulExtension)
     }
 }

@@ -1,5 +1,6 @@
-package ajk.gradle
+package ajk.gradle.start
 
+import ajk.gradle.ConsulExtension
 import de.undercouch.gradle.tasks.download.DownloadAction
 import org.gradle.api.Project
 
