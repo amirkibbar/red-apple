@@ -52,7 +52,7 @@ You can change the consul ports and version by defining the following in your bu
 
 ```
 
-The values show here above are the default values.
+The values shown here above are the default values.
 
 # Starting and stopping Consul within a gradle task
 
