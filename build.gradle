@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.0"
+    }
+}
+
 plugins {
     id "com.jfrog.bintray" version "1.2"
 }
@@ -7,6 +17,7 @@ version = "0.0.7"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
+apply plugin: "com.gradle.plugin-publish"
 
 compileGroovy {
     sourceCompatibility = '1.7'
@@ -88,6 +99,20 @@ bintray {
         labels = ['gradle', 'plugin', 'consul']
         version {
             name = project.version
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/amirkibbar/red-apple'
+    vcsUrl = 'https://github.com/amirkibbar/red-apple.git'
+    description = 'a Consul plugin for gradle to help running Consul during integration test and to allow registering and removing services and checks from a running Consul'
+    tags = ['consul']
+
+    plugins {
+        greetingsPlugin {
+            id = 'ajk.gradle.consul'
+            displayName = 'Gradle Consul plugin '
         }
     }
 }
