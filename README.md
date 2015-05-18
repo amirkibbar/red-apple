@@ -8,7 +8,7 @@ be used in integration tests that require a Consul instance
 
 Define the plugin in your build.gradle:
 
-```
+```gradle
 
     buildscript {
         repositories {
@@ -24,7 +24,7 @@ Define the plugin in your build.gradle:
 
 ## Starting consul
 
-```
+```bash
 
     $ gradlew startConsul
 
@@ -34,7 +34,7 @@ You don't need to install Consul - the plugin will install it for you, configure
 
 ## Stopping consul
 
-```
+```bash
 
     $ gradlew stopConsul
 ```
@@ -43,7 +43,7 @@ You don't need to install Consul - the plugin will install it for you, configure
 
 You can change the consul ports and version by defining the following in your build script:
 
-```
+```gradle
 
     consul {
         version = "0.5.1"
@@ -60,7 +60,7 @@ The values shown here above are the default values.
 
 You can start and stop Consul as part of a gradle task. This is very useful during integration tests:
 
-```
+```gradle
 
     task foo << {
         startConsul {}
@@ -76,7 +76,7 @@ Consul will start using the configuration in the `Consul {}` section (or the def
 
 You can register any service with any Consul, not just the local one started by this plugin. To register a service:
 
-```
+```gradle
 
     task foo << {
         registerConsulService {
@@ -123,12 +123,12 @@ To clarify let's examine this scenario:
   10.0.0.123
 - The Consul server is accessible through a gateway machine with a public IP address (exposed to the internet: 52.1.2.3
 - The gateway at 52.1.2.3 is running sshd
-- you'd like to register the service name with address 1.2.3.4 port 1234 in the Consul running on 10.0.0.123:8500 
+- You'd like to register the service name with address 1.2.3.4 port 1234 in the Consul running on 10.0.0.123:8500 
 
 The following settings will tell the registerConsulService extension to open a tunnel and use the Consul server at 
 10.0.0.123 instead of taking the `consul {}` configuration:
 
-```
+```gradle
 
     task foo << {
         registerConsulService {
@@ -152,13 +152,13 @@ The following settings will tell the registerConsulService extension to open a t
     
 ```
 
-The gatewayPort, privateKey, known_hosts and targetPort are optional - the value here above is the default value.
+The *gatewayPort*, *privateKey*, *known_hosts* and *targetPort* are optional - the value here above is the default value.
 
 You might run into a problem with the known_hosts - this is because [JSch](http://www.jcraft.com/jsch/) requires rsa
-keys in the known_hosts and not any other type of key. Some SSH client, like the one in Cygwin uses by default other
-keys. You can add your gateway rsa SSH key to your known_hosts as follows:
+keys in the known_hosts and not any other type of key. Some SSH clients, like the one in Cygwin use, by default, other
+key types. You can add your gateway rsa SSH key to your known_hosts as follows:
 
-```
+```bash
 
     ssh-keyscan -t rsa 52.1.2.3 >> ~/.ssh/known_hosts
 ```
@@ -174,7 +174,7 @@ You can deregister a service by its ID or all services that match a certain tag.
 
 If you know the service ID you can deregister it as follows:
 
-```
+```gradle
 
     task foo << {
         deregisterConsulService {
@@ -187,7 +187,7 @@ If you know the service ID you can deregister it as follows:
 
 You can deregister all services that have a specific tag value:
 
-```
+```gradle
 
     task foo << {
         deregisterConsulService {
