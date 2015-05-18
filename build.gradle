@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "ajk.gradle.consul"
-version = "0.0.7"
+version = "0.0.8"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
@@ -114,6 +114,12 @@ pluginBundle {
             id = 'ajk.gradle.consul'
             displayName = 'Gradle Consul plugin '
         }
+    }
+
+    mavenCoordinates {
+        groupId = "ajk.gradle.consul"
+        artifactId = "gradle-consul-plugin"
+        version = project.version
     }
 }
 
