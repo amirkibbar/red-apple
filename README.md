@@ -15,7 +15,7 @@ Define the plugin in your build.gradle:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.8")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.9")
         }
     }
 
@@ -110,6 +110,58 @@ When the *id* is omitted the service is registered with the *name* as its *id*.
 The *tags* are optional too.
  
 The name, address and port are required.
+
+## Registering a service with a Consul using an SSH tunnel
+
+Your Consul server might only be accessible using a gateway server if, for example, your Consul server is in some cloud
+prvoider, and you can only access its HTTP port through a tunnel. In this case you can configure the registerConsulService
+extension to open an SSH tunnel and run the command against a local port routed through that tunnel.
+
+To clarify let's examine this scenario:
+
+- The consul is installed on a server in a cloud provider with a local IP address (not exposed to the internet): 
+  10.0.0.123
+- The Consul server is accessible through a gateway machine with a public IP address (exposed to the internet: 52.1.2.3
+- The gateway at 52.1.2.3 is running sshd
+- you'd like to register the service name with address 1.2.3.4 port 1234 in the Consul running on 10.0.0.123:8500 
+
+The following settings will tell the registerConsulService extension to open a tunnel and use the Consul server at 
+10.0.0.123 instead of taking the `consul {}` configuration:
+
+```
+
+    task foo << {
+        registerConsulService {
+            // consul connection properties
+            gatewayAddress = '52.1.2.3'
+            gatewayPort = 22
+            gatewayUsername = 'ubuntu'
+            privateKey = file("${System.properties['user.home']}/.ssh/id_rsa")
+            known_hosts = file("${System.properties['user.home']}/.ssh/known_hosts")
+            targetAddress = '10.0.0.123'
+            targetPort = 8500
+
+            // service properties
+            id = 'my-service-id'
+            name = 'my-service'
+            address = '1.2.3.4'
+            port = 5678
+            tags = [ "tag-1", "tag-2" ]
+        }
+    }
+    
+```
+
+The gatewayPort, privateKey, known_hosts and targetPort are optional - the value here above is the default value.
+
+You might run into a problem with the known_hosts - this is because [JSch](http://www.jcraft.com/jsch/) requires rsa
+keys in the known_hosts and not any other type of key. Some SSH client, like the one in Cygwin uses by default other
+keys. You can add your gateway rsa SSH key to your known_hosts as follows:
+
+```
+
+    ssh-keyscan -t rsa 52.1.2.3 >> ~/.ssh/known_hosts
+```
 
 # Limitations
 

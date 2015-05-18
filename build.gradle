@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "ajk.gradle.consul"
-version = "0.0.8"
+version = "0.0.9"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
@@ -33,6 +33,7 @@ dependencies {
     compile localGroovy()
     compile "de.undercouch:gradle-download-task:1.2"
     compile "org.apache.httpcomponents:fluent-hc:4.4.1"
+    compile "com.jcraft:jsch:0.1.52"
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -124,3 +125,4 @@ pluginBundle {
 }
 
 bintrayUpload.dependsOn = [sourcesJar, javadocJar]
+publishPlugins.dependsOn = [bintrayUpload]

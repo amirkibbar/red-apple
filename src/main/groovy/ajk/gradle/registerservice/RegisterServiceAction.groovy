@@ -1,6 +1,8 @@
 package ajk.gradle.registerservice
 
 import ajk.gradle.ConsulExtension
+import ajk.gradle.SshTunnel
+import ajk.gradle.SshTunnelDefinition
 import org.apache.http.HttpHost
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner
@@ -13,7 +15,7 @@ import static org.apache.http.client.fluent.Request.Put
 import static org.apache.http.entity.ContentType.APPLICATION_JSON
 import static org.apache.http.impl.client.HttpClients.custom
 
-class RegisterServiceAction {
+class RegisterServiceAction extends SshTunnelDefinition {
     Project project
 
     String consulHostname
@@ -57,18 +59,35 @@ class RegisterServiceAction {
             id = name
         }
 
-        println "${CYAN}* consul:$NORMAL registering service [ $id, $name, $address:$port, $tags ] with consul at $consulHostname:$consulPort"
+        println "${CYAN}* consul:$NORMAL registering service [ $id, $name, $address:$port, $tags ]"
 
-        createExecutor().execute(Put("http://$consulHostname:$consulPort/v1/agent/service/register")
-                .bodyString("""{
+        SshTunnel tunnel
+        if (gatewayAddress != null) {
+            tunnel = new SshTunnel(this)
+
+            println "${CYAN}* consul:$NORMAL routing request through an ssh tunnel," +
+                    " local port: $tunnel.localPort, gateway: $tunnel.gatewayAddress:$tunnel.gatewayPort," +
+                    " remote address: $tunnel.targetAddress:$tunnel.targetPort"
+        } else {
+            println "${CYAN}* consul:$NORMAL using local Consul on port $consulPort"
+        }
+
+        String consulAddress = tunnel == null ? "$consulHostname:$consulPort" : "localhost:$tunnel.localPort"
+
+        try {
+            tunnel?.openTunnel()
+
+            createExecutor().execute(Put("http://$consulAddress/v1/agent/service/register")
+                    .bodyString("""{
     "ID": "$id",
     "Name": "$name",
     "Address": "$address",
     "Port": $port,
     "Tags": [ ${tags?.collect { "\"$it\"" }?.join(",")} ]
 }""", APPLICATION_JSON
-        )).returnContent().asString()
-
-        // todo allow to go through a gateway using SSH - use JSch to open a tunnel
+            )).returnContent().asString()
+        } finally {
+            tunnel?.closeTunnel()
+        }
     }
 }
