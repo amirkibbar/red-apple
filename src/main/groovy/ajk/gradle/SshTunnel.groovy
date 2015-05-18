@@ -15,14 +15,14 @@ class SshTunnel {
     int localPort
     private Session session
 
-    SshTunnel(SshTunnelDefinition definition) {
-        this(definition.gatewayAddress,
-                definition.gatewayPort,
-                definition.gatewayUsername,
-                definition.known_hosts,
-                definition.privateKey,
-                definition.targetAddress,
-                definition.targetPort)
+    SshTunnel(ConsulApiClient client) {
+        this(client.gatewayAddress,
+                client.gatewayPort,
+                client.gatewayUsername,
+                client.known_hosts,
+                client.privateKey,
+                client.targetAddress,
+                client.targetPort)
     }
 
     SshTunnel(String gatewayAddress, Integer gatewayPort, String gatewayUsername, File known_hosts, File privateKey, String targetAddress, Integer targetPort) {
@@ -37,7 +37,7 @@ class SshTunnel {
         this.localPort = findLocalPort()
     }
 
-    int openTunnel() {
+    int create() {
         JSch jsch = new JSch()
         session = jsch.getSession(gatewayUsername, gatewayAddress, gatewayPort)
         jsch.setKnownHosts(known_hosts.absolutePath)
@@ -49,8 +49,8 @@ class SshTunnel {
         return localPort
     }
 
-    void closeTunnel() {
-        session.disconnect()
+    void close() {
+        session?.disconnect()
     }
 
     @SuppressWarnings("GrMethodMayBeStatic")

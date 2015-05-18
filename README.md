@@ -15,7 +15,7 @@ Define the plugin in your build.gradle:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.9")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.10")
         }
     }
 
@@ -114,7 +114,7 @@ The name, address and port are required.
 ## Registering a service with a Consul using an SSH tunnel
 
 Your Consul server might only be accessible using a gateway server if, for example, your Consul server is in some cloud
-prvoider, and you can only access its HTTP port through a tunnel. In this case you can configure the registerConsulService
+provider, and you can only access its HTTP port through a tunnel. In this case you can configure the registerConsulService
 extension to open an SSH tunnel and run the command against a local port routed through that tunnel.
 
 To clarify let's examine this scenario:
@@ -162,6 +162,41 @@ keys. You can add your gateway rsa SSH key to your known_hosts as follows:
 
     ssh-keyscan -t rsa 52.1.2.3 >> ~/.ssh/known_hosts
 ```
+
+# Deregistering Consul services
+
+The deregisterConsulService extension supports the same connection options as the registerConsulService extension, 
+which means that you can deregister a service in a Consul behind an HTTP proxy or using an SSH tunnel through a gateway.
+
+You can deregister a service by its ID or all services that match a certain tag.
+
+## Deregister a service by its ID
+
+If you know the service ID you can deregister it as follows:
+
+```
+
+    task foo << {
+        deregisterConsulService {
+            id = 'my-service-id
+        }
+    }
+```
+
+## Deregister services by matching a tag value
+
+You can deregister all services that have a specific tag value:
+
+```
+
+    task foo << {
+        deregisterConsulService {
+            tag = 'tag-1'
+        }
+    }
+```
+
+The above task will deregister all Consul services that have the tag 'tag-1'.
 
 # Limitations
 

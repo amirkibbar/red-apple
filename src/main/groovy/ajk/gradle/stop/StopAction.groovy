@@ -4,9 +4,6 @@ import ajk.gradle.ConsulExtension
 import ajk.gradle.ConsulPlugin
 import org.gradle.api.Project
 
-import static ajk.gradle.ConsulPlugin.CYAN
-import static ajk.gradle.ConsulPlugin.NORMAL
-import static ajk.gradle.ConsulPlugin.RED
 import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS
 import static org.apache.tools.ant.taskdefs.condition.Os.isFamily
 
