@@ -4,6 +4,12 @@ be used in integration tests that require a Consul instance
 
 [ ![Download](https://api.bintray.com/packages/amirk/maven/gradle-consul-plugin/images/download.svg) ](https://bintray.com/amirk/maven/gradle-consul-plugin/_latestVersion)
 
+This plugin provides the following functionality:
+
+- Install a local Consul with a web UI, start it and stop it
+- Register and deregister services in any Consul (local, behind an HTTP proxy, using an SSH tunnel through a gateway server)
+- Deregister checks in any Consul (local, behind an HTTP proxy, using an SSH tunnel through a gateway server)
+
 # Using
 
 Define the plugin in your build.gradle:
