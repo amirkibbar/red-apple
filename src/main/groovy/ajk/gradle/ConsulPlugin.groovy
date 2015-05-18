@@ -1,5 +1,6 @@
 package ajk.gradle
 
+import ajk.gradle.check.DeregisterCheckExtension
 import ajk.gradle.service.DeregisterServiceExtension
 import ajk.gradle.service.RegisterServiceExtension
 import ajk.gradle.start.StartConsulExtension
@@ -63,5 +64,6 @@ class ConsulPlugin implements Plugin<Project> {
         project.extensions.create('stopConsul', StopConsulExtension, project, consulExtension)
         project.extensions.create('registerConsulService', RegisterServiceExtension, consulExtension)
         project.extensions.create('deregisterConsulService', DeregisterServiceExtension, consulExtension)
+        project.extensions.create('deregisterConsulCheck', DeregisterCheckExtension, consulExtension)
     }
 }

@@ -20,6 +20,10 @@ class DeregisterServiceAction extends ConsulApiClient {
     }
 
     void execute() {
+        if (id == null && tag == null) {
+            throw new IllegalArgumentException("you must provide either an id or a tag")
+        }
+
         if (id != null) {
             // deregister by id
             println "${CYAN}* consul:$NORMAL deregistering service $id"

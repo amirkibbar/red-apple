@@ -15,7 +15,7 @@ Define the plugin in your build.gradle:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.0.10")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.0")
         }
     }
 
@@ -197,6 +197,25 @@ You can deregister all services that have a specific tag value:
 ```
 
 The above task will deregister all Consul services that have the tag 'tag-1'.
+
+# Deregistering Consul checks
+
+Much like the deregisterConsulService extension, the deregisterConsulCheck extension can remove checks. This extension
+too supports the same connection options, which means that you can deregister checks in a Consul behind an HTTP proxy
+or using an SSH tunnel through a gateway.
+
+To deregister all checks that contain a some id:
+
+```gradle
+
+    task foo {
+        deregisterConsulCheck {
+            id = 'service'
+        }
+    }
+```
+
+The above task will deregister all Consul checks that have 'service' in their ID.
 
 # Limitations
 
