@@ -18,6 +18,7 @@ Define the plugin in your build.gradle:
 
     buildscript {
         repositories {
+            jcenter()
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
