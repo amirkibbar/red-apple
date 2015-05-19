@@ -224,6 +224,76 @@ To deregister all checks that contain a some id:
 
 The above task will deregister all Consul checks that have 'service' in their ID.
 
+# Listing services registered in Consul
+
+You can list the services in a Consul using the simple listConsulServices task or by using the more advanced
+listConsulServices extension. The task can only list the services registered in a local consul - as configured in the
+`consul {}` section, whereas the listConsulServices extension can list services in a Consul behind a firewall or using
+an SSH tunnel through a gateway.
+
+## Listing services with the task
+
+```bash
+
+    $ gradlew listConsulServices
+```
+
+The above will list the services in the local Consul in port 8500 (unless some other port has been configured in the
+`consul {}` section.
+
+## Listing services with the extension
+
+### Listing services in the localhost using an arbitrary port
+
+```gradle
+
+    task foo << {
+        listConsulServices {
+            consulPort = 8521
+        }
+    }
+```
+
+The task foo above will list the services registered on the Consul running at localhost:8521
+
+### Listing services in any host running behind an HTTP proxy
+
+```gradle
+
+    task foo << {
+        listConsulServices {
+            consulHostname = '1.2.3.4'
+            consulPort = 8500
+            useProxy = false
+            proxyHost = 'web-proxy.evil-corp.com'
+            proxyPort = 8888
+        }
+    }
+```
+
+The task foo above will list the services registered on the Consul running at 1.2.3.4:8500 behind the HTTP proxy at
+web-proxy.evil-corp.com:8888.
+
+### Listing services in any host that requires an SSH tunnel throguh a gateway
+
+```gradle
+
+    task foo << {
+        listConsulServices {
+            gatewayAddress = '52.1.2.3'
+            gatewayPort = 22
+            gatewayUsername = 'ubuntu'
+            privateKey = file("${System.properties['user.home']}/.ssh/id_rsa")
+            known_hosts = file("${System.properties['user.home']}/.ssh/known_hosts")
+            targetAddress = '10.0.0.123'
+            targetPort = 8500
+        }
+    }
+```
+
+The task foo above will list the services registered on the Consul running at 10.0.0.123:8500 using an SSH tunnel
+through the gateway at ubuntu@52.1.2.3:22.
+
 # Limitations
 
 For the time being the start and stop Consul commands only work on windows 

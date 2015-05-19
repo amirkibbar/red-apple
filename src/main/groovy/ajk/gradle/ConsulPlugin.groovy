@@ -2,6 +2,9 @@ package ajk.gradle
 
 import ajk.gradle.check.DeregisterCheckExtension
 import ajk.gradle.service.DeregisterServiceExtension
+import ajk.gradle.service.ListServicesAction
+import ajk.gradle.service.ListServicesExtension
+import ajk.gradle.service.ListServicesTask
 import ajk.gradle.service.RegisterServiceExtension
 import ajk.gradle.start.StartConsulExtension
 import ajk.gradle.start.StartConsulTask
@@ -21,6 +24,7 @@ class ConsulPlugin implements Plugin<Project> {
     static final String CYAN = "${ESC}[36m"
     static final String GREEN = "${ESC}[32m"
     static final String YELLOW = "${ESC}[33m"
+    static final String MAGENTA = "${ESC}[35m"
     static final String RED = "${ESC}[31m"
     static final String NORMAL = "${ESC}[0m"
 
@@ -32,6 +36,7 @@ class ConsulPlugin implements Plugin<Project> {
 
         StartConsulTask startConsul = project.task(type: StartConsulTask, 'startConsul')
         StopConsulTask stopConsul = project.task(type: StopConsulTask, 'stopConsul')
+        ListServicesTask listConsulServices = project.task(type: ListServicesTask, 'listConsulServices')
 
         def consulExtension = project.extensions.create('consul', ConsulExtension)
         consulExtension.with {
@@ -44,6 +49,7 @@ class ConsulPlugin implements Plugin<Project> {
         def projectAdapter = [
                 startConsul      : startConsul,
                 stopConsul       : stopConsul,
+                listConsulServices: listConsulServices,
                 projectsEvaluated: { Gradle gradle ->
                     startConsul.with {
                         version = consulExtension.version
@@ -55,6 +61,10 @@ class ConsulPlugin implements Plugin<Project> {
                     stopConsul.with {
                         consulDir = consulExtension.consulDir
                     }
+
+                    listConsulServices.with {
+                        httpPort = consulExtension.httpPort
+                    }
                 }
         ] as BuildAdapter
 
@@ -65,5 +75,6 @@ class ConsulPlugin implements Plugin<Project> {
         project.extensions.create('registerConsulService', RegisterServiceExtension, consulExtension)
         project.extensions.create('deregisterConsulService', DeregisterServiceExtension, consulExtension)
         project.extensions.create('deregisterConsulCheck', DeregisterCheckExtension, consulExtension)
+        project.extensions.create('listConsulServices', ListServicesExtension, consulExtension)
     }
 }
