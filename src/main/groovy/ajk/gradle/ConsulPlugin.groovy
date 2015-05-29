@@ -2,7 +2,6 @@ package ajk.gradle
 
 import ajk.gradle.check.DeregisterCheckExtension
 import ajk.gradle.service.DeregisterServiceExtension
-import ajk.gradle.service.ListServicesAction
 import ajk.gradle.service.ListServicesExtension
 import ajk.gradle.service.ListServicesTask
 import ajk.gradle.service.RegisterServiceExtension

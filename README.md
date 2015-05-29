@@ -22,7 +22,7 @@ Define the plugin in your build.gradle:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.0")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.1")
         }
     }
 
