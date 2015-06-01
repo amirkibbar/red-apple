@@ -15,7 +15,7 @@ import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle
 
 class ConsulPlugin implements Plugin<Project> {
-    static final String DEFAULT_VERSION = "0.5.1"
+    static final String DEFAULT_VERSION = "0.5.2"
     static final int DEFAULT_HTTP_PORT = 8500
     static final int DEFAULT_DNS_PORT = 8600
 
