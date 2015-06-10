@@ -2,6 +2,7 @@
 A gradle plugin that can start a [Consul](https://consul.io) instance during the build. The purpose of this plugin is to
 be used in integration tests that require a Consul instance
 
+[ ![Build Status](https://travis-ci.org/amirkibbar/red-apple.svg?branch=master) ](https://travis-ci.org/amirkibbar/red-apple.svg?branch=master)
 [ ![Download](https://api.bintray.com/packages/amirk/maven/gradle-consul-plugin/images/download.svg) ](https://bintray.com/amirk/maven/gradle-consul-plugin/_latestVersion)
 
 This plugin provides the following functionality:
@@ -12,7 +13,18 @@ This plugin provides the following functionality:
 
 # Using
 
-Define the plugin in your build.gradle:
+Define the plugin in your build.gradle
+
+Gradle 2.1 and above:
+
+```gradle
+
+    plugins {
+        id "ajk.gradle.consul" version "0.1.1"
+    }
+```
+
+Older gradle versions:
 
 ```gradle
 
