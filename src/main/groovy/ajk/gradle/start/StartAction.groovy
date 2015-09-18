@@ -44,18 +44,18 @@ class StartAction {
             ant.touch(file: marker, mkdirs: true)
 
             def consulZip = new File("$consulDir/consul.zip")
-            DownloadAction binaries = new DownloadAction()
+            DownloadAction binaries = new DownloadAction(project)
             binaries.dest(consulZip)
             binaries.src("https://dl.bintray.com/mitchellh/consul/${version}_windows_386.zip")
             binaries.onlyIfNewer(true)
-            binaries.execute(project)
+            binaries.execute()
 
             def uiZip = new File("$consulDir/ui.zip")
-            DownloadAction ui = new DownloadAction()
+            DownloadAction ui = new DownloadAction(project)
             ui.dest(uiZip)
             ui.src("https://dl.bintray.com/mitchellh/consul/${version}_web_ui.zip")
             ui.onlyIfNewer(true)
-            ui.execute(project)
+            ui.execute()
 
             ant.unzip(src: consulZip, dest: consulDir)
             ant.unzip(src: uiZip, dest: consulDir)
