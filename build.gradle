@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "ajk.gradle.consul"
-version = "0.1.1"
+version = "0.1.2"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
@@ -31,7 +31,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile "de.undercouch:gradle-download-task:1.2"
+    compile "de.undercouch:gradle-download-task:2.0.0"
     compile "org.apache.httpcomponents:fluent-hc:4.4.1"
     compile "com.jcraft:jsch:0.1.52"
 }
