@@ -46,14 +46,14 @@ class StartAction {
             def consulZip = new File("$consulDir/consul.zip")
             DownloadAction binaries = new DownloadAction(project)
             binaries.dest(consulZip)
-            binaries.src("https://dl.bintray.com/mitchellh/consul/${version}_windows_386.zip")
+            binaries.src("https://releases.hashicorp.com/consul/${version}/consul_${version}_windows_386.zip")
             binaries.onlyIfNewer(true)
             binaries.execute()
 
             def uiZip = new File("$consulDir/ui.zip")
             DownloadAction ui = new DownloadAction(project)
             ui.dest(uiZip)
-            ui.src("https://dl.bintray.com/mitchellh/consul/${version}_web_ui.zip")
+            ui.src("https://releases.hashicorp.com/consul/${version}/consul_${version}_web_ui.zip")
             ui.onlyIfNewer(true)
             ui.execute()
 
