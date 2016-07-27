@@ -4,10 +4,7 @@ import ajk.gradle.ConsulExtension
 import de.undercouch.gradle.tasks.download.DownloadAction
 import org.gradle.api.Project
 
-import static ajk.gradle.ConsulPlugin.CYAN
-import static ajk.gradle.ConsulPlugin.GREEN
-import static ajk.gradle.ConsulPlugin.NORMAL
-import static ajk.gradle.ConsulPlugin.RED
+import static ajk.gradle.ConsulPlugin.*
 import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS
 import static org.apache.tools.ant.taskdefs.condition.Os.isFamily
 
@@ -57,8 +54,14 @@ class StartAction {
             ui.onlyIfNewer(true)
             ui.execute()
 
+            def uiDir = consulDir
+            if (!version.startsWith("0.5")) {
+                uiDir = new File("$consulDir/dist")
+                uiDir.mkdirs()
+            }
+
             ant.unzip(src: consulZip, dest: consulDir)
-            ant.unzip(src: uiZip, dest: consulDir)
+            ant.unzip(src: uiZip, dest: uiDir)
         } else {
             println "${CYAN}* consul:$NORMAL using consul $version binaries in $consulDir"
         }
