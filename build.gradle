@@ -10,10 +10,11 @@ buildscript {
 
 plugins {
     id "com.jfrog.bintray" version "1.6"
+    id "idea"
 }
 
 group = "ajk.gradle.consul"
-version = "0.1.7"
+version = "0.1.8"
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'

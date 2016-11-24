@@ -12,6 +12,6 @@ class StopConsulTask extends DefaultTask {
 
     @TaskAction
     void stopConsul() {
-        new StopAction(project, consulDir)
+        new StopAction(project, consulDir).execute()
     }
 }
