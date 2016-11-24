@@ -25,21 +25,28 @@ class StopAction {
     }
 
     void execute() {
-        if (!isFamily(FAMILY_WINDOWS)) {
-            println "${ConsulPlugin.CYAN}* consul:$ConsulPlugin.RED for the time being this plugin is only supported on Windows$ConsulPlugin.NORMAL"
-            throw new UnsupportedOperationException();
-        }
-
-        File f = File.createTempFile("killThemAll_", ".bat")
-        f.deleteOnExit()
-
-        f << """
-wmic process where (name like "%%consul%%") delete
-"""
-
         println "${ConsulPlugin.CYAN}* consul:$ConsulPlugin.NORMAL stopping consul"
-        [f.getAbsolutePath()].execute().waitForOrKill(10 * 1000)
-
-        f.delete()
+        // Assume default LINUX
+        def sout = new StringBuilder(), serr = new StringBuilder()
+        def proc
+        if (isFamily(FAMILY_WINDOWS)) {
+            proc = [
+                    "taskkill",
+                    "/F",
+                    "/T",
+                    "/IM",
+                    "consul.exe"
+            ].execute()
+        }
+        else {
+            proc = [
+                    "pkill",
+                    "-f",
+                    "consul"
+            ].execute()
+        }
+        proc.consumeProcessOutput(sout, serr)
+        proc.waitForOrKill(10 * 1000)
+        println "${ConsulPlugin.CYAN}* consul: $ConsulPlugin.GREEN$sout$ConsulPlugin.RED$serr$ConsulPlugin.NORMAL "
     }
 }

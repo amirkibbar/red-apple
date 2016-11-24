@@ -31,20 +31,25 @@ class StartAction {
         this.httpPort = httpPort
         this.dnsPort = dnsPort
         this.version = version
-        this.consulDir = consulDir
+        this.consulDir = new File("$consulDir/$version")
+
     }
 
     private def installConsul = {
-        File marker = new File("$consulDir/consul.$version")
+        File marker = getExec()
         if (!marker.exists()) {
             println "${CYAN}* consul:$NORMAL installing consul in $consulDir"
-            ant.touch(file: marker, mkdirs: true)
 
-            def consulZip = new File("$consulDir/consul.zip")
+            // Assume default LINUX
+            def consulZip = "consul_${version}_linux_386.zip"
             DownloadAction binaries = new DownloadAction(project)
-            binaries.dest(consulZip)
-            binaries.src("https://releases.hashicorp.com/consul/${version}/consul_${version}_windows_386.zip")
-            binaries.onlyIfNewer(true)
+            if (isFamily(FAMILY_WINDOWS)) {
+                consulZip = "consul_${version}_windows_386.zip"
+            }
+            binaries.src("https://releases.hashicorp.com/consul/${version}/${consulZip}")
+            def consulDest = new File("$consulDir/$consulZip")
+            binaries.dest(consulDest)
+            binaries.onlyIfNewer(true) //Linux and Windows version can be loaded both
             binaries.execute()
 
             def uiZip = new File("$consulDir/ui.zip")
@@ -60,7 +65,8 @@ class StartAction {
                 uiDir.mkdirs()
             }
 
-            ant.unzip(src: consulZip, dest: consulDir)
+            ant.unzip(src: consulDest, dest: consulDir)
+            ant.chmod(dir:consulDir, perm:'+rx', includes:"consul")
             ant.unzip(src: uiZip, dest: uiDir)
         } else {
             println "${CYAN}* consul:$NORMAL using consul $version binaries in $consulDir"
@@ -68,17 +74,23 @@ class StartAction {
     }
 
     private def configureConsul = {
-        File configDir = new File("$project.buildDir/consul/consul.d")
-        File dataDir = new File("$project.buildDir/consul/data")
+        File configDir = getConfigDir()
+        File dataDir = getDataDir()
 
         if (!dataDir.exists()) {
             println "${CYAN}* consul:$NORMAL creating data dir: $dataDir"
-            dataDir.mkdirs()
+            if (!dataDir.mkdirs()){
+                println "${CYAN}* consul:$RED Unable to create data directory$NORMAL"
+                throw new RuntimeException();
+            }
         }
 
         if (!configDir.exists()) {
             println "${CYAN}* consul:$NORMAL creating configuration dir: $configDir"
-            configDir.mkdirs()
+            if (!configDir.mkdirs()){
+                println "${CYAN}* consul:$RED Unable to create configuration directory$NORMAL"
+                throw new RuntimeException();
+            }
             println "${CYAN}* consul:$NORMAL creating bootstrap configuration file"
             new File("$configDir/bootstrap.json") << """{
   "datacenter": "local",
@@ -112,7 +124,7 @@ class StartAction {
         println "${CYAN}* consul:$NORMAL starting consul"
 
         [
-                "$consulDir/consul.exe",
+                getExec().absolutePath,
                 "agent",
                 "-config-dir",
                 configDir.absolutePath
@@ -128,20 +140,40 @@ class StartAction {
         }
 
         if (ant.properties['consulTimeout']) {
-            ant.fail("${CYAN}* consul:$RED unable to start consul$NORMAL")
+            ant.fail("${CYAN}* consul:$RED unable to start consul$NORMAL ("+getExec().absolutePath+")")
         } else {
             println "${CYAN}* consul:$GREEN consul is up, browse to http://localhost:$httpPort to see the UI$NORMAL"
         }
     }
 
     void execute() {
-        if (!isFamily(FAMILY_WINDOWS)) {
-            println "${CYAN}* consul:$RED for the time being this plugin is only supported on Windows$NORMAL"
-            throw new UnsupportedOperationException();
-        }
-
         installConsul()
         def configDir = configureConsul()
         startInstance(configDir)
     }
+
+    File getExec() {
+        File consulExe = new File("$consulDir/consul")
+        if (isFamily(FAMILY_WINDOWS)) {
+            consulExe = new File("$consulDir/consul.exe")
+        }
+        consulExe
+    }
+
+    File getConfigDir() {
+        File configDir = new File("$project.buildDir/consul/consul.d")
+        if (isFamily(FAMILY_WINDOWS)) {
+            configDir = new File("$project.buildDir/consul/consul.d")
+        }
+        configDir
+    }
+
+    File getDataDir() {
+        File dataDir = new File("/tmp")
+        if (isFamily(FAMILY_WINDOWS)) {
+            dataDir = new File("$project.buildDir/consul/data")
+        }
+        dataDir
+    }
+
 }
