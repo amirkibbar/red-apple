@@ -19,20 +19,25 @@ class StartAction {
 
     File consulDir
 
+    File configDir
+
+    File dataDir
+
     AntBuilder ant
 
     StartAction(Project project, ConsulExtension extension) {
-        this(project, extension.httpPort, extension.dnsPort, extension.version, extension.consulDir)
+        this(project, extension.httpPort, extension.dnsPort, extension.version, extension.consulDir, extension.configDir, extension.dataDir)
     }
 
-    StartAction(Project project, int httpPort, int dnsPort, String version, File consulDir) {
+    StartAction(Project project, int httpPort, int dnsPort, String version, File consulDir, File configDir, File dataDir) {
         this.project = project
         this.ant = project.ant
         this.httpPort = httpPort
         this.dnsPort = dnsPort
         this.version = version
         this.consulDir = new File("$consulDir/$version")
-
+        this.configDir = configDir
+        this.dataDir = dataDir
     }
 
     private def installConsul = {
@@ -74,9 +79,6 @@ class StartAction {
     }
 
     private def configureConsul = {
-        File configDir = getConfigDir()
-        File dataDir = getDataDir()
-
         if (!dataDir.exists()) {
             println "${CYAN}* consul:$NORMAL creating data dir: $dataDir"
             if (!dataDir.mkdirs()){
@@ -159,21 +161,4 @@ class StartAction {
         }
         consulExe
     }
-
-    File getConfigDir() {
-        File configDir = new File("$project.buildDir/consul/consul.d")
-        if (isFamily(FAMILY_WINDOWS)) {
-            configDir = new File("$project.buildDir/consul/consul.d")
-        }
-        configDir
-    }
-
-    File getDataDir() {
-        File dataDir = new File("/tmp")
-        if (isFamily(FAMILY_WINDOWS)) {
-            dataDir = new File("$project.buildDir/consul/data")
-        }
-        dataDir
-    }
-
 }

@@ -43,6 +43,8 @@ class ConsulPlugin implements Plugin<Project> {
             httpPort = DEFAULT_HTTP_PORT
             dnsPort = DEFAULT_DNS_PORT
             consulDir = new File("$project.rootProject.projectDir/gradle/tools/consul")
+            dataDir = new File("$project.buildDir/consul/data")
+            configDir = new File("$project.buildDir/consul/consul.d")
         }
 
         def projectAdapter = [
@@ -55,6 +57,8 @@ class ConsulPlugin implements Plugin<Project> {
                         httpPort = consulExtension.httpPort
                         dnsPort = consulExtension.dnsPort
                         consulDir = consulExtension.consulDir
+                        dataDir = consulExtension.dataDir
+                        configDir = consulExtension.configDir
                     }
 
                     stopConsul.with {

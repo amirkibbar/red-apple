@@ -20,7 +20,7 @@ Gradle 2.1 and above:
 ```gradle
 
     plugins {
-        id "ajk.gradle.consul" version "0.1.8"
+        id "ajk.gradle.consul" version "0.1.9"
     }
 ```
 
@@ -34,7 +34,7 @@ Older gradle versions:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.8")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.9")
         }
     }
 
@@ -69,6 +69,8 @@ You can change the consul ports and version by defining the following in your bu
         httpPort = 8500
         dnsPort = 8600
         consulDir = file("$rootProject.projectDir/gradle/tools/consul")
+        dataDir = file("$project.buildDir/consul/data")
+        configDir = file("$project.buildDir/consul/consul.d")
     }
 
 ```

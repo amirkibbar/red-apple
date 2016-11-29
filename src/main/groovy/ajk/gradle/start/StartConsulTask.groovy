@@ -22,8 +22,16 @@ class StartConsulTask extends DefaultTask {
     @Optional
     File consulDir
 
+    @Input
+    @Optional
+    File dataDir
+
+    @Input
+    @Optional
+    File configDir
+
     @TaskAction
     void startConsul() {
-        new StartAction(project, httpPort, dnsPort, version, consulDir).execute()
+        new StartAction(project, httpPort, dnsPort, version, consulDir, configDir, dataDir).execute()
     }
 }

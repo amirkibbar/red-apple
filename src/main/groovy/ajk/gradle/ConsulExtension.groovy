@@ -5,4 +5,6 @@ class ConsulExtension {
     int httpPort
     int dnsPort
     File consulDir
+    File dataDir
+    File configDir
 }
