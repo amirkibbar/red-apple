@@ -4,12 +4,12 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.4"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
     }
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.6"
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 group = "ajk.gradle.consul"
@@ -31,7 +31,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile "de.undercouch:gradle-download-task:2.1.0"
+    compile "de.undercouch:gradle-download-task:3.1.2"
     compile "org.apache.httpcomponents:fluent-hc:4.5.2"
     compile "com.jcraft:jsch:0.1.53"
 }
@@ -128,5 +128,5 @@ bintrayUpload.dependsOn = [sourcesJar, javadocJar]
 publishPlugins.dependsOn = [bintrayUpload]
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+    gradleVersion = '3.2.1'
 }
