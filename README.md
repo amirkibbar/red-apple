@@ -20,7 +20,7 @@ Gradle 2.1 and above:
 ```gradle
 
     plugins {
-        id "ajk.gradle.consul" version "0.1.9"
+        id "ajk.gradle.consul" version "0.1.10"
     }
 ```
 
@@ -34,7 +34,7 @@ Older gradle versions:
             maven { url "http://dl.bintray.com/amirk/maven" }
         }
         dependencies {
-            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.9")
+            classpath("ajk.gradle.consul:gradle-consul-plugin:0.1.10")
         }
     }
 
