@@ -5,6 +5,7 @@ import de.undercouch.gradle.tasks.download.DownloadAction
 import org.gradle.api.Project
 
 import static ajk.gradle.ConsulPlugin.*
+import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC
 import static org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS
 import static org.apache.tools.ant.taskdefs.condition.Os.isFamily
 
@@ -50,6 +51,9 @@ class StartAction {
             DownloadAction binaries = new DownloadAction(project)
             if (isFamily(FAMILY_WINDOWS)) {
                 consulZip = "consul_${version}_windows_386.zip"
+            }
+            if (isFamily(FAMILY_MAC)) {
+                consulZip = "consul_${version}_darwin_386.zip"
             }
             binaries.src("https://releases.hashicorp.com/consul/${version}/${consulZip}")
             def consulDest = new File("$consulDir/$consulZip")
